@@ -1,4 +1,4 @@
-import yt_dlp
+import yt_dlp # type: ignore
 import os
 
 class YouTubeLoader:
