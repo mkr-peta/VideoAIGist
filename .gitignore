@@ -6,3 +6,4 @@ src/transcription/__pycache__/__init__.cpython-312.pyc
 src/transcription/__pycache__/transcriber.cpython-312.pyc
 src/transcription/__pycache__/youtube_loader.cpython-312.pyc
 secret_keys.py
+
