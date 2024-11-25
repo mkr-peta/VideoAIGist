@@ -10,3 +10,8 @@ secret_keys.py
 src/content_processing/__pycache__/__init__.cpython-312.pyc
 src/content_processing/__pycache__/analyzer.cpython-312.pyc
 src/content_processing/__pycache__/secret_keys.cpython-312.pyc
+src/transcription/__pycache__/__init__.cpython-39.pyc
+src/transcription/__pycache__/transcriber.cpython-39.pyc
+src/presentation/__pycache__/slide_generator.cpython-312.pyc
+src/presentation/__pycache__/__init__.cpython-312.pyc
+~$output.pptx
