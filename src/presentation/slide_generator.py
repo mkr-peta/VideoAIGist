@@ -109,31 +109,60 @@ class SlideGenerator:
         line.line.fill.background()
 
     def create_content_slide(self, content: dict, slide_number: int):
-        """Create a beautifully formatted content slide"""
+        """Create a beautifully formatted content slide with image support"""
         slide = self.prs.slides.add_slide(self.prs.slide_layouts[1])
         self._add_background(slide)
         
-        # Configure title with proper positioning
+        # Add title with adjusted spacing
         title_shape = slide.shapes.title
-        title_shape.top = Inches(0.4)
+        title_shape.top = Inches(0.4)  # Keep this the same
         title_shape.left = Inches(0.5)
         title_shape.width = Inches(12.333)
+        title_shape.height = Inches(1.0)  # Control title height
         title_shape.text = content['title']
-        title_shape.text_frame.paragraphs[0].alignment = PP_ALIGN.LEFT
-        run = title_shape.text_frame.paragraphs[0].runs[0]
+        title_frame = title_shape.text_frame
+        title_frame.paragraphs[0].alignment = PP_ALIGN.LEFT
+        title_frame.paragraphs[0].space_after = Pt(6)  # Reduce space after title
+        run = title_frame.paragraphs[0].runs[0]
         run.font.size = self.SUBTITLE_SIZE
         run.font.name = self.TITLE_FONT
         run.font.color.rgb = self.TITLE_COLOR
-        
-        # Configure content box with proper positioning
+
+        # Move content box up
         content_box = slide.placeholders[1]
-        content_box.top = Inches(1.5)
+        content_box.top = Inches(1.0)  # Changed from 1.5 to reduce gap
+        
+        # Check if slide has an image
+        if 'image_path' in content:
+            # More conservative width for content to prevent overlap
+            content_width = Inches(6.8)  # Reduced from 7.5
+            image_width = Inches(4.5)
+            image_height = Inches(3.5)
+            
+            # Add image with more margin from text
+            try:
+                image = slide.shapes.add_picture(
+                    content['image_path'],
+                    left=Inches(8.3),  # Increased from 8.0 to move image right
+                    top=Inches(1.8),
+                    width=image_width,
+                    height=image_height
+                )
+            except Exception as e:
+                print(f"Failed to add image to slide {slide_number}: {str(e)}")
+                content_width = Inches(11.933)  # Use full width if image fails
+        else:
+            content_width = Inches(11.933)  # Full width if no image
+        
+        # Configure content box with more precise positioning
+        content_box = slide.placeholders[1]
+        content_box.top = Inches(1)
         content_box.left = Inches(0.7)
-        content_box.width = Inches(11.933)
+        content_box.width = content_width
         tf = content_box.text_frame
         tf.clear()
         
-        # Add bullet points with proper formatting
+        # Add bullet points with better spacing
         for point in content['points']:
             p = tf.add_paragraph()
             p.level = 0
@@ -141,6 +170,8 @@ class SlideGenerator:
             p.alignment = PP_ALIGN.LEFT
             p.space_before = Pt(12)
             p.space_after = Pt(12)
+            # Adjust line spacing
+            p.line_spacing = 1.2  # 120% of font size
             for run in p.runs:
                 run.font.size = self.BODY_SIZE
                 run.font.name = self.BODY_FONT
@@ -154,7 +185,7 @@ class SlideGenerator:
         for note in content['speaker_notes']:
             p = text_frame.add_paragraph()
             run = self._set_text_properties(p, self.NOTES_SIZE, self.BODY_FONT, 
-                                          self.TEXT_COLOR)
+                                        self.TEXT_COLOR)
             run.text = f"• {note}"
         
         self._add_footer(slide, slide_number)
