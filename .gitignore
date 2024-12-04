@@ -15,3 +15,6 @@ src/transcription/__pycache__/transcriber.cpython-39.pyc
 src/presentation/__pycache__/slide_generator.cpython-312.pyc
 src/presentation/__pycache__/__init__.cpython-312.pyc
 ~$output.pptx
+*.pyc
+src/image_service/__pycache__/image_generator.cpython-312.pyc
+src/image_service/__pycache__/__init__.cpython-312.pyc
